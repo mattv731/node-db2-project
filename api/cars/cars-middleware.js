@@ -35,17 +35,12 @@ const checkCarPayload = async (req, res, next) => {
 }
 
 const checkVinNumberValid = async (req, res, next) => {
-  try {
     const { vin } = await req.body
     if (vinValidator.validate(vin)) {
-      res.status(400).json({ message: `vin ${vin} is invalid` })
-    } else {
       next()
+    } else {
+      next(res.status(400).json({ message: `vin ${vin} is invalid` }))
     }
-  }
-  catch (err) {
-    next(err)
-  }
 }
 
 const checkVinNumberUnique = async (req, res, next) => {
