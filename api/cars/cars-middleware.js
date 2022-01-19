@@ -44,13 +44,16 @@ const checkVinNumberValid = async (req, res, next) => {
 }
 
 const checkVinNumberUnique = async (req, res, next) => {
-  const { vin } = req.body
+  const { vin } = await req.body
   const cars = await Cars.getAll()
   cars.forEach(car => {
-    if (car.vin.trim() === vin){
-      return res.status(400).json({ message: `vin ${vin} already exists`})
-    } else {next()}
+    if (car.vin !== vin){
+      return
+    } else {
+      next(res.status(400).json({ message: `vin ${vin} already exists`}))
+    }
   })
+  next()
 }
 
 module.exports = {checkCarId,
